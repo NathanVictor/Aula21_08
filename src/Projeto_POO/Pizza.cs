@@ -10,24 +10,30 @@ namespace XulambsFoods {
         // ENTENDER O PROBLEMA!!!
         //Regra 0 -- não entre em pânico
         //Regra 1 -- não viaje
+        //Regra 2 -- não interessa como vai funcionar
+        //Regra 3 -- isto não é um cachimbo
         /// </summary>
         /// 
+
+        #region constantes
+        private const int MaxIngredientes = 8;
+        private const double PrecoBase = 29d;
+        private const double ValorPorAdicional = 5d;
+        #endregion
+
         #region atributos
-        int _maxIngredientes;
-        double _precoBase;
-        int _quantIngredientes;
-        double _valorPorAdicional;
-        string _descricao;
+        private static int s_pizzasVendidas;
+
+        private int _quantIngredientes;
+        private string _descricao;
         #endregion
 
         #region construtores
 
         private void Init(int adicionais) {
             _descricao = "Pizza";
-            _maxIngredientes = 8;
-            _precoBase = 29d;
             AdicionarIngredientes(adicionais);
-            _valorPorAdicional = 5d;
+            s_pizzasVendidas++;
         }
 
         public Pizza() {
@@ -43,9 +49,15 @@ namespace XulambsFoods {
         }
         #endregion
 
+        #region acesso
+        public static int GetQtdVendida() {
+            return s_pizzasVendidas;
+        }
+        #endregion
+
         #region métodos privados
         private double ValorAdicionais() {
-            return _valorPorAdicional * _quantIngredientes;
+            return ValorPorAdicional * _quantIngredientes;
         }
 
         private void ModificarDescricao() {
@@ -54,13 +66,13 @@ namespace XulambsFoods {
 
         private bool PodeAdicionar(int quantos) {
             return (quantos >= 0 &&
-                    quantos + _quantIngredientes <= _maxIngredientes);
+                    quantos + _quantIngredientes <= MaxIngredientes);
         }
         #endregion
 
         #region métodos públicos
         public double CalcularValorFinal() {
-            return _precoBase + ValorAdicionais();
+            return PrecoBase + ValorAdicionais();
         }
 
         /// <summary>
@@ -71,7 +83,7 @@ namespace XulambsFoods {
         /// <returns>A quantidade de ingredientes na pizza após a execução do método.</returns>
         public int AdicionarIngredientes(int quantos) {
             if (PodeAdicionar(quantos)) {
-                _quantIngredientes = _quantIngredientes + quantos;
+                _quantIngredientes += quantos;
                 ModificarDescricao();
             }
             return _quantIngredientes;
@@ -86,7 +98,7 @@ namespace XulambsFoods {
             StringBuilder cupom = new StringBuilder("Xulambs Pizza!!!\n");
             cupom.AppendLine("================");
             cupom.AppendLine($"{_descricao}");
-            cupom.AppendLine($"\tPizza: {_precoBase:C2}");
+            cupom.AppendLine($"\tPizza: {PrecoBase:C2}");
             cupom.AppendLine($"\t{_quantIngredientes} adicionais : {ValorAdicionais():C2}");
             cupom.AppendLine($"TOTAL: {CalcularValorFinal():C2}");
             cupom.Append("================");
