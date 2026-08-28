@@ -4,10 +4,12 @@ namespace XulambsFoods {
     public class XulambsApp
     {
         static LinkedList<Pizza> pizzas;
+        
         static void Cabecalho() {
             Console.Clear();
-            Console.WriteLine("XULAMBS PIZZA v0.1");
+            Console.WriteLine("XULAMBS PIZZA v0.11");
             Console.WriteLine("==================");
+            Console.WriteLine($"Pizzas vendidas hoje: {Pizza.GetQuantidadeVendida():D2}");
         }
 
         static void Pausa() {
@@ -35,9 +37,11 @@ namespace XulambsFoods {
             Console.WriteLine("Comprando uma pizza:");
             Console.Write("Quantos ingredientes você deseja (0-8)? ");
             int quantos = int.Parse(Console.ReadLine());
-            Pizza novaPizza = new Pizza(quantos);
+            Pizza novaPizza = new Pizza();
+            novaPizza.AdicionarIngredientes(quantos);
             ImprimirDadosPizza(novaPizza);
             pizzas.AddLast(novaPizza);
+
         }
 
         private static void MostrarPizzas() {
@@ -51,6 +55,7 @@ namespace XulambsFoods {
         static void Main(string[] args) {
             int opcao;
             pizzas = new LinkedList<Pizza>();
+            
             do {
                 opcao = MenuPrincipal();
                 Action metodo = 
